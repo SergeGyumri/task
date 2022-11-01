@@ -47,11 +47,9 @@ function* handleAddUser(action) {
     console.warn(e)
     yield put({
       type: ADD_USER_FAIL,
-      // message: e.message,
-      // payload: e.response.data,
     });
     if (action.payload.cb) {
-      // action.payload.cb(e.response.data, null)
+      action.payload.cb(e.response.data.errors, null)
     }
   }
 }

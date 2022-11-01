@@ -26,9 +26,10 @@ export default function reducer(state = initialState, action) {
 
     case SEND_MESSAGE_SUCCESS: {
       const {messagesList} = state;
+      const {message, senderId, senderName} = action.payload;
       return {
         ...state,
-        messagesList: [...messagesList, {message: action.payload.message, senderId: action.payload.senderId}]
+        messagesList: [...messagesList, {message, senderId, senderName}]
       }
     }
     default: {

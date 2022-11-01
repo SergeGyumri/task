@@ -31,10 +31,7 @@ class Api {
   }
 
   static goToChat = (data = {}) => {
-    this.goToChatController = new AbortController();
-    return api.post('/users/go-to-chat', data, {
-      signal: this.goToChatController.signal
-    });
+    return api.post('/users/go-to-chat', data);
   }
 
   static logOutChat() {
@@ -57,9 +54,6 @@ class Api {
     return api.get('/users/my-account');
   }
 
-  static cancelRequest = () => {
-    this.goToChatController?.abort();
-  }
 }
 
 export default Api

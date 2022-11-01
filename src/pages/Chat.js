@@ -8,8 +8,6 @@ import _ from 'lodash'
 import {getMyAccount, logOut} from "../store/actions/users";
 import Typing from "../components/Typing";
 
-// 192.168.31.244
-
 function Chat() {
   const [message, setMessage] = useState('');
   const [token, setToken] = useState(Token.getToken());
@@ -55,8 +53,14 @@ function Chat() {
         <div className="messagesBlock">
           <ul className='messages'>
             {messagesList.map(l => {
-              return <li className={`message ${l.senderId === myAccount.id ? 'myMessage' : 'otherMessage'}`}
-                         key={_.uniqueId('message_')}>{l.message}</li>
+              return (
+                <React.Fragment key={_.uniqueId()}>
+                  <li className={`messageList ${l.senderId === myAccount.id ? 'myMessage' : 'otherMessage'}`}>
+                    <p className='senderName'>{l.senderName}</p>
+                    <p className='message'>{l.message}</p>
+                  </li>
+                </React.Fragment>
+              )
             })}
           </ul>
         </div>

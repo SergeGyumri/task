@@ -4,23 +4,26 @@ import Loading from "../components/Loading";
 import {useNavigate} from "react-router-dom";
 import Token from "../services/Token";
 import _ from 'lodash'
+import Errors from '../components/Errors'
 import {connect, useDispatch, useSelector} from "react-redux";
 import {
   getFormRequest,
 } from "../store/actions/form";
 import {goToChatRequest, logOut} from "../store/actions/users";
 import Api from "../Api";
+import {type} from "@testing-library/user-event/dist/type";
 
 function StartPage() {
   const dispatch = useDispatch();
   const [selectedAgeBtn, setSelectedAgeBtn] = useState(null);
   const [selectedInterest, setSelectedInterest] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState('');
   const navigate = useNavigate();
   const agesListRequestStatus = useSelector(store => store.form.agesListRequestStatus);
   const ages = useSelector(store => store.form.ages);
   const interests = useSelector(store => store.form.interests);
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     dispatch(logOut)
     dispatch(getFormRequest());
@@ -30,16 +33,20 @@ function StartPage() {
     ev.preventDefault();
     setSelectedAgeBtn(id);
   }
+  const handleChangeName = (ev) => {
+    ev.preventDefault();
+    setUserName(ev.target.value);
+  }
 
   const handleSearchRoom = async (ev) => {
     ev.preventDefault();
     try {
       if (!loading) {
-        setErrors([]);
+        setErrors({});
         setLoading(!loading);
-        dispatch(goToChatRequest({ageId: selectedAgeBtn, interestId: selectedInterest}, (err, data) => {
+        dispatch(goToChatRequest({ageId: selectedAgeBtn, interestId: selectedInterest, userName}, (err, data) => {
           if (err) {
-            setErrors(err.errors.error);
+            setErrors(err);
             setLoading(false);
           } else if (data.status === 'ok') {
             Token.setToken(data.token);
@@ -47,7 +54,7 @@ function StartPage() {
           }
         }))
       } else {
-        Api.cancelRequest()
+        Api.cancelRequest();
         setLoading(!loading);
       }
     } catch (e) {
@@ -61,15 +68,17 @@ function StartPage() {
       id: item.id, value: item.id, label: item.value,
     }))
   }
+
   return (
+
     <div className='wrapper'>
       <div className="content">
         <Loading status={loading}/>
-        {errors.length ? errors.map(e => (
-          <h3 key={_.uniqueId()} className='errors'>{e}!</h3>
-        )) : null}
+        <Errors errors={errors}/>
         {!loading ? (
           <form className='form'>
+            <input value={userName} type="text" className="chooseName" maxLength='15' placeholder='choose Name'
+                   onChange={handleChangeName}/>
             {agesListRequestStatus === 'request' ? <Loading status={true}/> :
               <>
                 <div className="btns">
@@ -94,7 +103,7 @@ function StartPage() {
 
             {ages.length && interests.length ?
               <button className='doneBtn' onClick={handleSearchRoom}>search</button> : null}
-          </form>) : <button className='doneBtn' onClick={handleSearchRoom}>cancel</button>}
+          </form>) : null}
 
       </div>
     </div>);
