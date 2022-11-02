@@ -18,6 +18,10 @@ api.interceptors.request.use((config) => {
 
 class Api {
 
+  static logIn(data = {}) {
+    return api.post('/admin/login', data);
+  }
+
   static getFormData() {
     return api.get('/form/get-form');
   }

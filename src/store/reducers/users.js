@@ -16,6 +16,7 @@ const initialState = {
   token: Token.getToken(),
   addUserRequestStatus: '',
   account: {},
+  adminAccount: {},
   typing: false,
 }
 
@@ -27,9 +28,17 @@ export default function reducer(state = initialState, action) {
       }
     }
     case GET_MY_ACCOUNT_SUCCESS: {
-      return {
-        ...state,
-        account: action.payload,
+      const {type} = action.payload;
+      if (type === 0) {
+        return {
+          ...state,
+          account: action.payload,
+        }
+      } else if (type === 1) {
+        return {
+          ...state,
+          adminAccount: action.payload,
+        }
       }
     }
     case GET_MY_ACCOUNT_FAIL: {
@@ -66,6 +75,8 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         token: '',
+        account: {},
+        adminAccount: {}
       }
     }
     case SOCKET_FRIEND_TYPING: {

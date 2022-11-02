@@ -3,6 +3,17 @@ export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
 export const ADD_USER_FAIL = 'ADD_USER_FAIL';
 
 
+export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
+export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
+export const LOG_IN_FAIL = 'LOG_IN_FAIL';
+
+export function logIn(data) {
+  return {
+    type: LOG_IN_REQUEST,
+    payload: data
+  }
+}
+
 export const GET_MY_ACCOUNT_REQUEST = 'GET_MY_ACCOUNT_REQUEST';
 export const GET_MY_ACCOUNT_SUCCESS = 'GET_MY_ACCOUNT_SUCCESS';
 export const GET_MY_ACCOUNT_FAIL = 'GET_MY_ACCOUNT_FAIL';

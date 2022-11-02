@@ -7,7 +7,7 @@ import {
   LOG_OUT_SUCCESS,
   GET_MY_ACCOUNT_SUCCESS,
   GET_MY_ACCOUNT_FAIL,
-  GET_MY_ACCOUNT_REQUEST
+  GET_MY_ACCOUNT_REQUEST, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAIL
 } from "../actions/users";
 import Api from "../../Api";
 
@@ -15,12 +15,29 @@ export default function* watcher() {
   yield takeLatest(ADD_USER_REQUEST, handleAddUser);
   yield takeLatest(LOG_OUT, handleLogOut);
   yield takeLatest(GET_MY_ACCOUNT_REQUEST, handleGemMyAccount);
+  yield takeLatest(LOG_IN_REQUEST, handleLogIn);
 }
 
+
+function* handleLogIn(action) {
+  try {
+    const data = action.payload;
+    const {account} = yield call(Api.logIn, data);
+    yield put({
+      type: LOG_IN_SUCCESS,
+      payload: account
+    })
+  } catch (e) {
+    yield put({
+      type: LOG_IN_FAIL,
+    });
+  }
+}
 
 function* handleGemMyAccount() {
   try {
     const {data} = yield call(Api.getMyAccount);
+
     yield put({
       type: GET_MY_ACCOUNT_SUCCESS,
       payload: data.user

@@ -25,7 +25,7 @@ function Chat() {
       dispatch(getMyAccount());
       dispatch(socketInit(token));
     }
-  }, [token])
+  }, [token]);
   const typeMessage = (ev) => {
     ev.preventDefault();
     dispatch(sendTyping(myAccount))
