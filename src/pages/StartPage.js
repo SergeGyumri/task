@@ -3,15 +3,12 @@ import Select from 'react-select';
 import Loading from "../components/Loading";
 import {useNavigate} from "react-router-dom";
 import Token from "../services/Token";
-import _ from 'lodash'
 import Errors from '../components/Errors'
-import {connect, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
   getFormRequest,
 } from "../store/actions/form";
 import {goToChatRequest, logOut} from "../store/actions/users";
-import Api from "../Api";
-import {type} from "@testing-library/user-event/dist/type";
 
 function StartPage() {
   const dispatch = useDispatch();
@@ -39,12 +36,17 @@ function StartPage() {
   }
 
   const handleSearchRoom = async (ev) => {
+
     ev.preventDefault();
     try {
       if (!loading) {
         setErrors({});
         setLoading(!loading);
-        dispatch(goToChatRequest({ageId: selectedAgeBtn, interestId: selectedInterest, userName}, (err, data) => {
+        dispatch(goToChatRequest({
+          ageId: selectedAgeBtn,
+          interestId: selectedInterest,
+          userName
+        }, (err, data) => {
           if (err) {
             setErrors(err);
             setLoading(false);
@@ -54,30 +56,21 @@ function StartPage() {
           }
         }))
       } else {
-        Api.cancelRequest();
         setLoading(!loading);
       }
     } catch (e) {
-
     }
   }
 
-  let interestsField;
-  if (Array.isArray(interests)) {
-    interestsField = interests.map(item => ({
-      id: item.id, value: item.id, label: item.value,
-    }))
-  }
-
   return (
-
     <div className='wrapper'>
       <div className="content">
         <Loading status={loading}/>
         <Errors errors={errors}/>
         {!loading ? (
           <form className='form'>
-            <input value={userName} type="text" className="chooseName" maxLength='15' placeholder='choose Name'
+            <input value={userName} type="text" className="chooseName" maxLength='15'
+                   placeholder='choose Name'
                    onChange={handleChangeName}/>
             {agesListRequestStatus === 'request' ? <Loading status={true}/> :
               <>
@@ -93,10 +86,11 @@ function StartPage() {
                   {interests.length ? <Select
                     className='interestSelect'
                     placeholder='Choose interest'
-                    value={interestsField.find(i => i.id === selectedInterest)}
+                    value={interests.find(i => i.id === selectedInterest)}
                     onChange={v => setSelectedInterest(v.id)}
-                    options={interestsField}
-                    // getOptionValue={o => o.id}
+                    options={interests}
+                    getOptionValue={item => item.id}
+                    getOptionLabel={item => item.value}
                   /> : <p className='notFound'>sorry interests not found :(</p>}
                 </div>
               </>}

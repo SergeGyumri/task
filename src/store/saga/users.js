@@ -14,27 +14,33 @@ import Api from "../../Api";
 export default function* watcher() {
   yield takeLatest(ADD_USER_REQUEST, handleAddUser);
   yield takeLatest(LOG_OUT, handleLogOut);
-  yield takeLatest(GET_MY_ACCOUNT_REQUEST, handleGemMyAccount);
+  yield takeLatest(GET_MY_ACCOUNT_REQUEST, handleGetMyAccount);
   yield takeLatest(LOG_IN_REQUEST, handleLogIn);
 }
 
 
 function* handleLogIn(action) {
   try {
-    const data = action.payload;
-    const {account} = yield call(Api.logIn, data);
+    const {data} = yield call(Api.logIn, action.payload.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      payload: account
+      payload: data
     })
+    if (action.payload.cb) {
+      action.payload.cb(null, data);
+    }
   } catch (e) {
+    console.warn(e);
     yield put({
       type: LOG_IN_FAIL,
     });
+    if (action.payload.cb) {
+      action.payload.cb(e, null)
+    }
   }
 }
 
-function* handleGemMyAccount() {
+function* handleGetMyAccount() {
   try {
     const {data} = yield call(Api.getMyAccount);
 
@@ -46,7 +52,6 @@ function* handleGemMyAccount() {
     yield put({
       type: GET_MY_ACCOUNT_FAIL,
     });
-
   }
 }
 

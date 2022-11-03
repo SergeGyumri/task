@@ -6,7 +6,8 @@ import {
   GET_MY_ACCOUNT_REQUEST,
   GET_MY_ACCOUNT_SUCCESS,
   LOG_OUT,
-  LOG_OUT_SUCCESS
+  LOG_OUT_SUCCESS,
+  LOG_IN_SUCCESS, LOG_IN_FAIL, LOG_IN_REQUEST
 } from "../actions/users";
 import Token from "../../services/Token";
 
@@ -22,6 +23,21 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case LOG_IN_REQUEST: {
+      return {
+        ...state,
+      }
+    }
+    case LOG_IN_SUCCESS: {
+      return {
+        ...state,
+      }
+    }
+    case LOG_IN_FAIL: {
+      return {
+        ...state,
+      }
+    }
     case GET_MY_ACCOUNT_REQUEST: {
       return {
         ...state,

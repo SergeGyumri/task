@@ -7,7 +7,7 @@ const api = axios.create({
   baseURL: REACT_APP_API_URL,
 });
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use( (config) => {
   const token = Token.getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
