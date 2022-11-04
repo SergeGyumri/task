@@ -1,13 +1,13 @@
 import {
-  ADD_USER_FAIL,
-  ADD_USER_REQUEST,
-  ADD_USER_SUCCESS,
+  GO_TO_CHAT_FAIL,
+  GO_TO_CHAT_REQUEST,
+  GO_TO_CHAT_SUCCESS,
   GET_MY_ACCOUNT_FAIL,
   GET_MY_ACCOUNT_REQUEST,
   GET_MY_ACCOUNT_SUCCESS,
-  LOG_OUT,
-  LOG_OUT_SUCCESS,
-  LOG_IN_SUCCESS, LOG_IN_FAIL, LOG_IN_REQUEST
+  LOG_OUT_CHAT,
+  LOG_OUT_CHAT_SUCCESS,
+  LOG_IN_SUCCESS, LOG_IN_FAIL, LOG_IN_REQUEST, LOG_OUT_CHAT_FAIL
 } from "../actions/users";
 import Token from "../../services/Token";
 
@@ -29,8 +29,11 @@ export default function reducer(state = initialState, action) {
       }
     }
     case LOG_IN_SUCCESS: {
+      const {token} = action.payload
+      Token.setToken(token)
       return {
         ...state,
+        token,
       }
     }
     case LOG_IN_FAIL: {
@@ -53,6 +56,7 @@ export default function reducer(state = initialState, action) {
       } else if (type === 1) {
         return {
           ...state,
+          account: action.payload,
           adminAccount: action.payload,
         }
       }
@@ -62,39 +66,46 @@ export default function reducer(state = initialState, action) {
         ...state,
       }
     }
-    case ADD_USER_REQUEST: {
+    case GO_TO_CHAT_REQUEST: {
       return {
         ...state,
         addUserRequestStatus: 'request'
       }
     }
-    case ADD_USER_SUCCESS: {
+    case GO_TO_CHAT_SUCCESS: {
+      const {account} = action.payload;
       return {
         ...state,
-        addUserRequestStatus: 'ok'
+        addUserRequestStatus: 'ok',
+        account
       }
     }
-    case ADD_USER_FAIL: {
+    case GO_TO_CHAT_FAIL: {
       return {
         ...state,
         addUserRequestStatus: 'fail'
       }
     }
-    case LOG_OUT: {
+
+    case LOG_OUT_CHAT: {
       return {
         ...state,
       }
     }
-    case LOG_OUT_SUCCESS: {
-      Token.delete();
-      window.location.href = '/welcome';
+    case LOG_OUT_CHAT_SUCCESS: {
+      const {token} = action.payload;
+      Token.setToken(token);
       return {
         ...state,
-        token: '',
-        account: {},
-        adminAccount: {}
+        token
       }
     }
+    case LOG_OUT_CHAT_FAIL: {
+      return {
+        ...state,
+      }
+    }
+
     case SOCKET_FRIEND_TYPING: {
       return {
         ...state,

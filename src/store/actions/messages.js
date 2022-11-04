@@ -5,7 +5,6 @@ export const GET_MESSAGES_LIST_FAIL = 'GET_MESSAGES_LIST_FAIL';
 export function getMessagesRequest() {
   return {
     type: GET_MESSAGES_LIST_REQUEST,
-    payload: {}
   }
 }
 

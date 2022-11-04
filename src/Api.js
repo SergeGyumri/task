@@ -7,7 +7,7 @@ const api = axios.create({
   baseURL: REACT_APP_API_URL,
 });
 
-api.interceptors.request.use( (config) => {
+api.interceptors.request.use((config) => {
   const token = Token.getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -18,8 +18,12 @@ api.interceptors.request.use( (config) => {
 
 class Api {
 
+  static register(data = {}) {
+    return api.post('users/register', data);
+  }
+
   static logIn(data = {}) {
-    return api.post('/admin/login', data);
+    return api.post('users/login', data);
   }
 
   static getFormData() {
@@ -50,8 +54,8 @@ class Api {
     return api.post('/messages/send-message', {message});
   }
 
-  static deleteMessage(id) {
-    return api.delete('/messages/delete-message', id);
+  static deleteMessage(data) {
+    return api.delete('/messages/delete-message', data);
   }
 
   static getMyAccount() {

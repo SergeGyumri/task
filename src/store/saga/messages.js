@@ -22,8 +22,6 @@ function* handleSendMessage(action) {
     console.warn(e)
     yield put({
       type: SEND_MESSAGE_FAIL,
-      message: e.message,
-      payload: e.response.data,
     });
   }
 }
@@ -39,7 +37,6 @@ function* handleGetMessages() {
     console.warn(e)
     yield put({
       type: GET_MESSAGES_LIST_FAIL,
-      message: e.message,
     });
   }
 }

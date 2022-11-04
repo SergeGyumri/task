@@ -1,11 +1,11 @@
-export const ADD_USER_REQUEST = 'ADD_USER_REQUEST';
-export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
-export const ADD_USER_FAIL = 'ADD_USER_FAIL';
+export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST';
+export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
+export const REGISTER_USER_FAIL = 'REGISTER_USER_FAIL';
 
 
-export function goToChatRequest(data, cb) {
+export function registerUser(data, cb) {
   return {
-    type: ADD_USER_REQUEST,
+    type: REGISTER_USER_REQUEST,
     payload: {data, cb}
   }
 }
@@ -21,6 +21,18 @@ export function logIn(data, cb) {
   }
 }
 
+export const GO_TO_CHAT_REQUEST = 'GO_TO_CHAT_REQUEST';
+export const GO_TO_CHAT_SUCCESS = 'GO_TO_CHAT_SUCCESS';
+export const GO_TO_CHAT_FAIL = 'GO_TO_CHAT_FAIL';
+
+
+export function goToChatRequest(data, cb) {
+  return {
+    type: GO_TO_CHAT_REQUEST,
+    payload: {data, cb}
+  }
+}
+
 export const GET_MY_ACCOUNT_REQUEST = 'GET_MY_ACCOUNT_REQUEST';
 export const GET_MY_ACCOUNT_SUCCESS = 'GET_MY_ACCOUNT_SUCCESS';
 export const GET_MY_ACCOUNT_FAIL = 'GET_MY_ACCOUNT_FAIL';
@@ -32,12 +44,13 @@ export function getMyAccount() {
 }
 
 
-export const LOG_OUT = 'LOG_OUT';
-export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS'
+export const LOG_OUT_CHAT = 'LOG_OUT_CHAT';
+export const LOG_OUT_CHAT_SUCCESS = 'LOG_OUT_CHAT_SUCCESS'
+export const LOG_OUT_CHAT_FAIL = 'LOG_OUT_CHAT_FAIL'
 
-export function logOut() {
+export function logOutChat() {
   return {
-    type: LOG_OUT,
+    type: LOG_OUT_CHAT,
   }
 }
 

@@ -5,13 +5,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {sendTyping, socketInit, socketUserDisconnect} from "../store/actions/socket";
 import {getMessagesRequest, sendMessageRequest} from "../store/actions/messages";
 import _ from 'lodash'
-import {getMyAccount, logOut} from "../store/actions/users";
+import {getMyAccount, logOutChat} from "../store/actions/users";
 import Typing from "../components/Typing";
 
 function Chat() {
   const [message, setMessage] = useState('');
-  const [token, setToken] = useState(Token.getToken());
   const messagesList = useSelector(store => store.messages.messagesList);
+  const token = useSelector(store => store.users.token);
   const typing = useSelector(store => store.users.typing);
   const myAccount = useSelector(store => store.users.account);
   const dispatch = useDispatch();
@@ -19,11 +19,10 @@ function Chat() {
 
   useEffect(() => {
     if (!token) {
-      navigate('/welcome');
+      navigate('/login');
     } else {
-      dispatch(getMessagesRequest())
-      dispatch(getMyAccount());
-      dispatch(socketInit(token));
+      dispatch(getMessagesRequest());
+      dispatch(socketInit(Token.getToken()));
     }
   }, [token]);
   const typeMessage = (ev) => {
@@ -39,9 +38,9 @@ function Chat() {
     }
   }
   const handleLogOut = () => {
-    dispatch(logOut());
+    dispatch(logOutChat());
     dispatch(socketUserDisconnect);
-    setToken(null);
+    navigate('/welcome')
   }
   return (
     <div className='chatWrapper'>

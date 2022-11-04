@@ -20,14 +20,31 @@ function Login() {
       }
     }))
   }
+  const goToRegister = (ev) => {
+    ev.preventDefault();
+    navigate('/register')
+  }
   return (
-    <div>
-      <form className='loginForm'>
-        <input type="text" value={login} onChange={(ev) => setLogin(ev.target.value)}/>
-        <input type="password" value={password} onChange={(ev) => setPassword(ev.target.value)}/>
-        <button onClick={handleLogin}>log in</button>
+    <div className='wrapper'>
+      <form className='form'>
+        <div className='pageBlock'>
+          <h3 className='pageBlockTitle'>login</h3>
+        </div>
+        <div className="pageFormBlock">
+          <input placeholder='Login' className='g-input chooseName' type="text" value={login}
+                 onChange={(ev) => setLogin(ev.target.value)}/>
+          <input placeholder='Password' className='g-input chooseName' type="password" value={password}
+                 onChange={(ev) => setPassword(ev.target.value)}/>
+          <button className='g-btn' onClick={handleLogin}>go</button>
+        </div>
+        <div className='otherBlock'>
+          <p className='desc'>dont have a account ? </p>
+          <button className='g-btn' onClick={goToRegister}>register</button>
+        </div>
       </form>
+
     </div>
+
   );
 }
 
