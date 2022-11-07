@@ -3,15 +3,18 @@ import Token from "../services/Token";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {sendTyping, socketInit, socketUserDisconnect} from "../store/actions/socket";
-import {getMessagesRequest, sendMessageRequest} from "../store/actions/messages";
+import {deleteMessageRequest, getMessagesRequest, sendMessageRequest} from "../store/actions/messages";
 import _ from 'lodash'
 import {getMyAccount, logOutChat} from "../store/actions/users";
 import Typing from "../components/Typing";
+import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function Chat() {
   const [message, setMessage] = useState('');
   const messagesList = useSelector(store => store.messages.messagesList);
   const token = useSelector(store => store.users.token);
+  const [menuIsOpen, setMenuIsOpen] = useState(null);
   const typing = useSelector(store => store.users.typing);
   const myAccount = useSelector(store => store.users.account);
   const dispatch = useDispatch();
@@ -21,6 +24,7 @@ function Chat() {
     if (!token) {
       navigate('/login');
     } else {
+      dispatch(getMyAccount());
       dispatch(getMessagesRequest());
       dispatch(socketInit(Token.getToken()));
     }
@@ -42,8 +46,22 @@ function Chat() {
     dispatch(socketUserDisconnect);
     navigate('/welcome')
   }
+  const handleMenuOpen = (id) => {
+    setMenuIsOpen(id);
+  }
+  const handleOverlay = () => {
+    setMenuIsOpen(null);
+  }
+  const handleBlockUser = (userId) => {
+
+  }
+  const handleDeleteMessage = (messageId) => {
+    dispatch(deleteMessageRequest(messageId));
+    setMenuIsOpen(null);
+  }
   return (
     <div className='chatWrapper'>
+      {menuIsOpen ? <div onClick={handleOverlay} className='menuOverlay'></div> : null}
       <button className='logOutBtn' onClick={handleLogOut}>other</button>
       <div className="chatBlock">
         <div className="chatWithName">
@@ -57,7 +75,20 @@ function Chat() {
                   <li className={`messageList ${l.senderId === myAccount.id ? 'myMessage' : 'otherMessage'}`}>
                     <p className='senderName'>{l.senderName}</p>
                     <p className='message'>{l.message}</p>
+                    <button onClick={() => handleMenuOpen(l.id)} className='iconOpenMessageMore'>
+                      <FontAwesomeIcon icon={faEllipsisVertical}/>
+                    </button>
+                    {menuIsOpen === l.id ?
+                      <div className='messageMoreBtnList'>
+                        {myAccount.type === 1 && l.senderId !== myAccount.id ?
+                          <button className='messageMoreBtn blockUser'>block</button> : null}
+                        {l.senderId === myAccount.id || myAccount.type === 1 ?
+                          <button className='messageMoreBtn'
+                                  onClick={() => handleDeleteMessage(l.id)}>delete</button> : null}
+                        {l.senderId !== myAccount.id ? <button className='messageMoreBtn'>report</button> : null}
+                      </div> : null}
                   </li>
+
                 </React.Fragment>
               )
             })}

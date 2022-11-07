@@ -18,3 +18,14 @@ export function sendMessageRequest(message = {}) {
     payload: {message}
   }
 }
+
+export const DELETE_MESSAGE_REQUEST = 'DELETE_MESSAGE_REQUEST';
+export const DELETE_MESSAGE_SUCCESS = 'DELETE_MESSAGE_SUCCESS';
+export const DELETE_MESSAGE_FAIL = 'DELETE_MESSAGE_FAIL';
+
+export function deleteMessageRequest(messageId) {
+  return {
+    type: DELETE_MESSAGE_REQUEST,
+    payload: {messageId}
+  }
+}

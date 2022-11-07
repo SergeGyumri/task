@@ -1,8 +1,8 @@
 import {
   GET_MESSAGES_LIST_REQUEST,
   GET_MESSAGES_LIST_SUCCESS,
-  SEND_MESSAGE_SUCCESS
 } from "../actions/messages";
+import {SOCKET_DELETE_MESSAGE, SOCKET_SEND_MESSAGE} from "../actions/socket";
 
 const initialState = {
   messagesList: [],
@@ -23,13 +23,21 @@ export default function reducer(state = initialState, action) {
         messagesList: [...messages],
       }
     }
-
-    case SEND_MESSAGE_SUCCESS: {
+    case SOCKET_SEND_MESSAGE : {
       const {messagesList} = state;
-      const {message, senderId, senderName} = action.payload;
+      const {message, senderId, senderName, id} = action.payload;
       return {
         ...state,
-        messagesList: [...messagesList, {message, senderId, senderName}]
+        messagesList: [...messagesList, {message, senderId, senderName, id}]
+      }
+    }
+    case SOCKET_DELETE_MESSAGE : {
+      const {messagesList} = state;
+      const messageId = action.payload;
+      const messages = messagesList.filter(message => +message.id !== +messageId);
+      return {
+        ...state,
+        messagesList: messages,
       }
     }
     default: {

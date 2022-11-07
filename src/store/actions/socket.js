@@ -1,5 +1,5 @@
 import {io} from "socket.io-client";
-import {SEND_MESSAGE_SUCCESS} from "./messages";
+import {DELETE_MESSAGE_SUCCESS, SEND_MESSAGE_SUCCESS} from "./messages";
 
 let socket;
 let typingTimeout;
@@ -8,7 +8,8 @@ const {REACT_APP_API_URL} = process.env;
 
 export const SOCKET_FRIEND_TYPING = 'SOCKET_FRIEND_TYPING';
 export const SOCKET_FRIEND_TYPING_END = 'SOCKET_FRIEND_TYPING_END';
-
+export const SOCKET_DELETE_MESSAGE = 'SOCKET_DELETE_MESSAGE'
+export const SOCKET_SEND_MESSAGE = 'SOCKET_SEND_MESSAGE'
 
 export function socketInit(token) {
   return (dispatch) => {
@@ -17,13 +18,12 @@ export function socketInit(token) {
     }
     socket = io.connect(REACT_APP_API_URL, {
       extraHeaders: {
-        Authorization: `Bearer ${token}`,
-        transports: ['websocket'],
+        Authorization: `Bearer ${token}`, transports: ['websocket'],
       }
     });
     socket.on('new-message', (data) => {
       dispatch({
-        type: SEND_MESSAGE_SUCCESS,
+        type: SOCKET_SEND_MESSAGE,
         payload: data
       });
       dispatch({
@@ -31,10 +31,15 @@ export function socketInit(token) {
       });
     });
 
+    socket.on('delete-message', (messageId) => {
+      dispatch({
+        type: SOCKET_DELETE_MESSAGE,
+        payload: messageId
+      });
+    });
     socket.on('typing', (account) => {
       dispatch({
-        type: SOCKET_FRIEND_TYPING,
-        payload: account
+        type: SOCKET_FRIEND_TYPING, payload: account
       });
       clearTimeout(typingTimeout)
       typingTimeout = setTimeout(() => {

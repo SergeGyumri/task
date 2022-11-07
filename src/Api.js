@@ -54,8 +54,8 @@ class Api {
     return api.post('/messages/send-message', {message});
   }
 
-  static deleteMessage(data) {
-    return api.delete('/messages/delete-message', data);
+  static deleteMessage(messageId) {
+    return api.delete(`/messages/delete-message/${messageId}`);
   }
 
   static getMyAccount() {
