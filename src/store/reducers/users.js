@@ -7,11 +7,11 @@ import {
   GET_MY_ACCOUNT_SUCCESS,
   LOG_OUT_CHAT,
   LOG_OUT_CHAT_SUCCESS,
-  LOG_IN_SUCCESS, LOG_IN_FAIL, LOG_IN_REQUEST, LOG_OUT_CHAT_FAIL
+  LOG_IN_SUCCESS, LOG_IN_FAIL, LOG_IN_REQUEST, LOG_OUT_CHAT_FAIL, BLOCK_USER_SUCCESS
 } from "../actions/users";
 import Token from "../../services/Token";
 
-import {SOCKET_FRIEND_TYPING_END, SOCKET_FRIEND_TYPING} from "../actions/socket";
+import {SOCKET_FRIEND_TYPING_END, SOCKET_FRIEND_TYPING, SOCKET_BLOCK_USER} from "../actions/socket";
 
 const initialState = {
   token: Token.getToken(),
@@ -19,6 +19,7 @@ const initialState = {
   account: {},
   adminAccount: {},
   typing: false,
+  message: ''
 }
 
 export default function reducer(state = initialState, action) {
@@ -117,6 +118,15 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         typing: false,
+      }
+    }
+    case SOCKET_BLOCK_USER: {
+      Token.delete();
+      window.location.href = '/login'
+      return {
+        ...state,
+        token: null,
+        account: {},
       }
     }
     default: {

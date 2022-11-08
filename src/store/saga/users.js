@@ -13,7 +13,7 @@ import {
   LOG_IN_FAIL,
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAIL
+  REGISTER_USER_FAIL, BLOCK_USER_REQUEST, BLOCK_USER_SUCCESS, BLOCK_USER_FAIL
 } from "../actions/users";
 import Api from "../../Api";
 
@@ -23,6 +23,7 @@ export default function* watcher() {
   yield takeLatest(GO_TO_CHAT_REQUEST, handleGoToChat);
   yield takeLatest(LOG_OUT_CHAT, handleLogOutChat);
   yield takeLatest(GET_MY_ACCOUNT_REQUEST, handleGetMyAccount);
+  yield takeLatest(BLOCK_USER_REQUEST, handleBlockUser);
 }
 
 
@@ -37,12 +38,11 @@ function* handleRegister(action) {
       action.payload.cb(null, data);
     }
   } catch (e) {
-    console.warn(e);
     yield put({
       type: REGISTER_USER_FAIL,
     });
     if (action.payload.cb) {
-      action.payload.cb(e, null)
+      action.payload.cb(e.response.data, null)
     }
   }
 }
@@ -58,12 +58,11 @@ function* handleLogIn(action) {
       action.payload.cb(null, data);
     }
   } catch (e) {
-    console.warn(e);
     yield put({
       type: LOG_IN_FAIL,
     });
     if (action.payload.cb) {
-      action.payload.cb(e, null)
+      action.payload.cb(e.response.data, null)
     }
   }
 }
@@ -79,12 +78,11 @@ function* handleGoToChat(action) {
       action.payload.cb(null, data)
     }
   } catch (e) {
-    console.warn(e)
     yield put({
       type: GO_TO_CHAT_FAIL,
     });
     if (action.payload.cb) {
-      action.payload.cb(e.response.data.errors, null)
+      action.payload.cb(e.response.data, null);
     }
   }
 }
@@ -111,6 +109,20 @@ function* handleGetMyAccount() {
   } catch (e) {
     yield put({
       type: GET_MY_ACCOUNT_FAIL,
+    });
+  }
+}
+
+function* handleBlockUser(action) {
+  try {
+    const userId = action.payload
+    yield call(Api.blockUser, userId);
+    yield put({
+      type: BLOCK_USER_SUCCESS,
+    })
+  } catch (e) {
+    yield put({
+      type: BLOCK_USER_FAIL,
     });
   }
 }

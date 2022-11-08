@@ -10,6 +10,7 @@ export const SOCKET_FRIEND_TYPING = 'SOCKET_FRIEND_TYPING';
 export const SOCKET_FRIEND_TYPING_END = 'SOCKET_FRIEND_TYPING_END';
 export const SOCKET_DELETE_MESSAGE = 'SOCKET_DELETE_MESSAGE'
 export const SOCKET_SEND_MESSAGE = 'SOCKET_SEND_MESSAGE'
+export const SOCKET_BLOCK_USER = 'SOCKET_BLOCK_USER'
 
 export function socketInit(token) {
   return (dispatch) => {
@@ -30,7 +31,12 @@ export function socketInit(token) {
         type: SOCKET_FRIEND_TYPING_END,
       });
     });
-
+    socket.on('user-block', (data) => {
+      dispatch({
+        type: SOCKET_BLOCK_USER,
+        payload: data
+      });
+    });
     socket.on('delete-message', (messageId) => {
       dispatch({
         type: SOCKET_DELETE_MESSAGE,

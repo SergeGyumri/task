@@ -4,6 +4,7 @@ import Loading from "../components/Loading";
 import {useNavigate} from "react-router-dom";
 import Token from "../services/Token";
 import Errors from '../components/Errors'
+import _ from 'lodash'
 import {useDispatch, useSelector} from "react-redux";
 import {
   addFieldRequest,
@@ -69,12 +70,10 @@ function StartPage() {
         setErrors({});
         setLoading(!loading);
         dispatch(goToChatRequest({
-          ageId: selectedAgeBtn,
-          interestId: selectedInterest,
-          userName
+          ageId: selectedAgeBtn, interestId: selectedInterest, userName
         }, (err, data) => {
           if (err) {
-            setErrors(err);
+            setErrors(err.errors);
             setLoading(false);
           } else if (data.status === 'ok') {
             Token.setToken(data.token);
@@ -90,7 +89,9 @@ function StartPage() {
 
   return (
     <div className='wrapper'>
-      <Errors errors={errors}/>
+      <div className="err-block">
+        <Errors errors={errors}/>
+      </div>
       {!loading ? (
         <form className='form'>
           <div className="welcomeBigBlock">

@@ -55,4 +55,16 @@ export function logOutChat() {
 }
 
 
+export const BLOCK_USER_REQUEST = 'BLOCK_USER_REQUEST';
+export const BLOCK_USER_SUCCESS = 'BLOCK_USER_SUCCESS'
+export const BLOCK_USER_FAIL = 'BLOCK_USER_FAIL'
+
+export function blockUser(userId) {
+  return {
+    type: BLOCK_USER_REQUEST,
+    payload: userId
+  }
+}
+
+
 

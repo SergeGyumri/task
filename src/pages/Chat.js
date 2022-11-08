@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {sendTyping, socketInit, socketUserDisconnect} from "../store/actions/socket";
 import {deleteMessageRequest, getMessagesRequest, sendMessageRequest} from "../store/actions/messages";
 import _ from 'lodash'
-import {getMyAccount, logOutChat} from "../store/actions/users";
+import {blockUser, getMyAccount, logOutChat} from "../store/actions/users";
 import Typing from "../components/Typing";
 import {faEllipsisVertical} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -53,7 +53,7 @@ function Chat() {
     setMenuIsOpen(null);
   }
   const handleBlockUser = (userId) => {
-
+    dispatch(blockUser(userId));
   }
   const handleDeleteMessage = (messageId) => {
     dispatch(deleteMessageRequest(messageId));
@@ -73,6 +73,7 @@ function Chat() {
               return (
                 <React.Fragment key={_.uniqueId()}>
                   <li className={`messageList ${l.senderId === myAccount.id ? 'myMessage' : 'otherMessage'}`}>
+                    {l.status ? <p className='senderName message-status'>{l.status}</p> : null}
                     <p className='senderName'>{l.senderName}</p>
                     <p className='message'>{l.message}</p>
                     <button onClick={() => handleMenuOpen(l.id)} className='iconOpenMessageMore'>
@@ -81,7 +82,8 @@ function Chat() {
                     {menuIsOpen === l.id ?
                       <div className='messageMoreBtnList'>
                         {myAccount.type === 1 && l.senderId !== myAccount.id ?
-                          <button className='messageMoreBtn blockUser'>block</button> : null}
+                          <button onClick={() => handleBlockUser(l.senderId)}
+                                  className='messageMoreBtn blockUser'>block</button> : null}
                         {l.senderId === myAccount.id || myAccount.type === 1 ?
                           <button className='messageMoreBtn'
                                   onClick={() => handleDeleteMessage(l.id)}>delete</button> : null}

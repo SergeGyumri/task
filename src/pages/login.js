@@ -3,17 +3,20 @@ import {useDispatch} from "react-redux";
 import {logIn} from "../store/actions/users";
 import Token from "../services/Token";
 import {useNavigate} from "react-router-dom";
+import Errors from "../components/Errors";
 
 function Login() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleLogin = (ev) => {
     ev.preventDefault();
     dispatch(logIn({login, password}, (err, data) => {
       if (err) {
-        console.log(err)
+        setErrors(err.errors)
       } else if (data.status === 'ok') {
         Token.setToken(data.token);
         navigate('/welcome');
@@ -26,6 +29,9 @@ function Login() {
   }
   return (
     <div className='wrapper'>
+      <div className="err-block">
+        <Errors errors={errors}/>
+      </div>
       <form className='form'>
         <div className='pageBlock'>
           <h3 className='pageBlockTitle'>login</h3>

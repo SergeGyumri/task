@@ -1,18 +1,20 @@
 import React, {useState} from 'react';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {registerUser} from "../store/actions/users";
 import {useNavigate} from "react-router-dom";
+import Errors from "../components/Errors";
 
 function Register() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = (ev) => {
     ev.preventDefault();
     dispatch(registerUser({login, password}, (err, data) => {
       if (err) {
-        console.log(err)
+        setErrors(err.errors)
       } else if (data.status === 'ok') {
         navigate('/login');
       }
@@ -24,6 +26,9 @@ function Register() {
   }
   return (
     <div className='wrapper'>
+      <div className="err-block">
+        <Errors errors={errors}/>
+      </div>
       <form className='form'>
         <div className='pageBlock'>
           <h3 className='pageBlockTitle'>Register</h3>

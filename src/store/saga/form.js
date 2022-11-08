@@ -19,7 +19,6 @@ function* handleAddField(action) {
       payload: data.newValues
     })
   } catch (e) {
-    console.warn(e)
     yield put({
       type: ADD_FORM_FIELD_FAIL,
     });
@@ -34,11 +33,8 @@ function* handleGetForm() {
       payload: data
     })
   } catch (e) {
-    console.warn(e)
     yield put({
       type: GET_FORM_FAIL,
-      message: e?.message,
-      payload: e?.response?.data,
     });
   }
 }

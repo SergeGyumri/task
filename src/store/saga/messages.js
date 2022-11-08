@@ -27,7 +27,6 @@ function* handleSendMessage(action) {
       type: SEND_MESSAGE_SUCCESS,
     });
   } catch (e) {
-    console.warn(e)
     yield put({
       type: SEND_MESSAGE_FAIL,
     });
@@ -42,7 +41,6 @@ function* handleDeleteMessage(action) {
       type: DELETE_MESSAGE_SUCCESS,
     });
   } catch (e) {
-    console.warn(e)
     yield put({
       type: DELETE_MESSAGE_FAIL,
     });
@@ -57,7 +55,6 @@ function* handleGetMessages() {
       payload: data
     })
   } catch (e) {
-    console.warn(e)
     yield put({
       type: GET_MESSAGES_LIST_FAIL,
     });

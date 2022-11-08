@@ -58,6 +58,10 @@ class Api {
     return api.delete(`/messages/delete-message/${messageId}`);
   }
 
+  static blockUser(userId) {
+    return api.put('/admin/block-user', {userId});
+  }
+
   static getMyAccount() {
     return api.get('/users/my-account');
   }
